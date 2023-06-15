@@ -1,13 +1,11 @@
-/*
- * main - Entry point
- * Return: 0 shows success
- *\
-
 #include <stdio.h>
+/**
+ * main - An entry path to the program
+ * Return: 0 (success)
+ */
 
-int main()
+int main(void)
 {
-    printf("with proper grammar, but the outcome is a piece of art,\n");
-
-    return 0;
+	printf("with proper grammar, but the outcome is a piece of art,\n");
+	return (0);
 }

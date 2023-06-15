@@ -1,13 +1,10 @@
-/*
- * main - Entry point
- * Return: 0 indicates success
- */
-
 #include <stdio.h>
-
-int main() 
+/**
+ * main - An entry point of the program
+ * Return: 0 (Success)
+ */
+int main(void)
 {
-    puts("\"Programming is like building a multilingual puzzle");
-
-    return 0;
+puts("\ "Programming is like building a multilingual puzzle");
+return (0);
 }
