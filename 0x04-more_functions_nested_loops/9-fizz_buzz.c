@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "main.h"
+
 
 /**
  * main - Enrty point to the program
