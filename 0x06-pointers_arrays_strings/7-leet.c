@@ -13,11 +13,11 @@ char *leet(char *n)
 	char a[] = "aAeEoOtTlL";
 	char b[] = "4433007711";
 
-	for (x = 0; n[x] != '\n'; x++)
+	for (x = 0; *(n + x); x++)
 	{
-		for (y = 0; y < 10; y++)
+		for (y = 0; y <= 9; y++)
 		{
-			if (n[x] == a[y])
+			if (a[y] == n[x])
 			{
 				n[x] = b[y];
 			}
