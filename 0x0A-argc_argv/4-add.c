@@ -4,10 +4,10 @@
 #include <string.h>
 
 /**
- * check_num - check the number of input digits
- * @str: array strings
- * Return: 0 success
- */
+ * check_num - entry point to print strings
+ * @str: the string to be printed
+ * Return: 0 success 1 Error
+ */
 
 int check_num(char *str)
 {
