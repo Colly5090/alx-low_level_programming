@@ -3,15 +3,15 @@
 #include "main.h"
 
 /**
- * main - entry point that print minimum of change coin
- * @argc: number of command line arguments
- * @argv: array of arguments to be passed
- * Return: 0 success, 1 Error
- */
+ * main - entry point to print change of a coin
+ * @argc: number of command line argument
+ * @argv: array of argument passed by argc
+ * Return: 0 success 1 Error
+ */
 
 int main(int argc, char *argv[])
 {
-	int n, x; 
+	int n, x;
 	int total;
 	int coins[] = {25, 10, 5, 2, 1};
 
