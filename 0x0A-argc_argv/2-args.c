@@ -3,7 +3,7 @@
 /**
  * main - entry point to print number given
  * @argc: number of command line argument
- * @argv: array of argument passed by argc 
+ * @argv: array of argument passed by argc
  * Return: 0 success
  */
 int main(int argc, char *argv[])
