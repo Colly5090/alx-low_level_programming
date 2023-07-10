@@ -46,7 +46,7 @@ char **strtow(char *str)
 	if (string == 0)
 		return (NULL);
 
-	arr = malloc(sizeof(char) * (string + 1));
+	arr = (char **) malloc(sizeof(char *) * (string + 1));
 	if (arr == NULL)
 		return (NULL);
 
@@ -57,7 +57,7 @@ char **strtow(char *str)
 			if (c)
 			{
 				y = a;
-				mat = malloc(sizeof(char) * (c + 1));
+				mat = (char *) malloc(sizeof(char) * (c + 1));
 				if (mat == NULL)
 					return (NULL);
 				while (x < y)
