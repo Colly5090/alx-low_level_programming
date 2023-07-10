@@ -15,8 +15,10 @@ int word_count(char *s)
 
 	for (i = 0; s[i] != '\0'; i++)
 	{
-		if s[i] == ''
+		if (s[i] == ' ')
+		{
 			str = 0;
+		}
 		else if (str == 0)
 		{
 			str = 1;
@@ -34,4 +36,43 @@ int word_count(char *s)
 
 char **strtow(char *str)
 {
+	char **arr, *mat;
+	int a, b = 0, l = 0, c = 0;
+	int string, x, y;
 
+	while (*(str + l))
+		l++;
+	string = word_count(str);
+	if (string == 0)
+		return (NULL);
+
+	arr = malloc(sizeof(char) * (string + 1));
+	if (arr == NULL)
+		return (NULL);
+
+	for (a = 0; a <= l; a++)
+	{
+		if (str[a] == ' ' || str[a] == '\0')
+		{
+			if (c)
+			{
+				y = a;
+				mat = malloc(sizeof(char) * (c + 1));
+				if (mat == NULL)
+					return (NULL);
+				while (x < y)
+					*mat++ = str[x++];
+				*mat = '\0';
+				arr[b] = mat - c;
+				b++;
+				c = 0;
+			}
+		}
+		else if (c++ == 0)
+			x = a;
+	}
+
+	arr[b] = NULL;
+
+	return (arr);
+}
