@@ -2,11 +2,12 @@
 #include <stdlib.h>
 
 /**
- * main - a program to print its own opcodes
- * @argc: number of input arguments
- * @argv: an array of arguments
- * Return: 0 success
- */
+ * main - to a print its own opcode
+ * @argc: input of arguments
+ * @argv: an array of the arguments
+ * Return: 0 Success
+ */
+
 int main(int argc, char *argv[])
 {
 	int bytes, x;
