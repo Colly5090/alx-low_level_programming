@@ -11,9 +11,9 @@ size_t print_listint(const listint_t *h)
 	const listint_t *searcher;
 
 	searcher = h;
-	while (searcher->next != NULL)
+	while (searcher)
 	{
-		printf("%d", searcher->n);
+		printf("%d\n", searcher->n);
 		number++;
 		searcher = searcher->next;
 	}
