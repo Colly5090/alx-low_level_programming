@@ -8,7 +8,7 @@
 size_t free_listint_safe(listint_t **h)
 {
 	listint_t *searcher;
-	size_t length;
+	size_t length = 0;
 	int i;
 
 	if (!h || !*h)
@@ -22,13 +22,13 @@ size_t free_listint_safe(listint_t **h)
 		if (i > 0)
 		{
 			searcher = (*h)->next;
-			free(*h);
+			/*free(*h);*/
 			*h = searcher;
 			length++;
 		}
 		else
 		{
-			free(*h);
+			/*free(*h);*/
 			*h = NULL;
 			length++;
 			break;
