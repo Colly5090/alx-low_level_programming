@@ -17,5 +17,5 @@ size_t print_listint(const listint_t *h)
 		number++;
 		searcher = searcher->next;
 	}
-	return(number);
+	return (number);
 }
