@@ -7,22 +7,18 @@
  */
 int sum_listint(listint_t *head)
 {
-	listint_t searcher;
+	listint_t *searcher = head;
 	int addUp = 0;
 
-	searcher = head;
 
-	if (*head == NULL)
+	if (head == NULL)
 	{
 		return (0);
 	}
-	else
+	while (searcher)
 	{
-		while (searcher)
-		{
-			addUp += searcher->n;
-			searcher = searcher->next;
-		}
+		addUp += searcher->n;
+		searcher = searcher->next;
 	}
 	return (addUp);
 }
