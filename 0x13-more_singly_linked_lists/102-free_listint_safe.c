@@ -11,7 +11,7 @@ size_t free_listint_safe(listint_t **h)
 	size_t length;
 	unsigned int i;
 
-	if (h == NULL || *h->next == NULL)
+	if (h == NULL || (*h)->next == NULL)
 		return (0);
 
 	while (*h)
