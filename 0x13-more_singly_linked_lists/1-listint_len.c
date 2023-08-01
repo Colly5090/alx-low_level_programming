@@ -1,11 +1,11 @@
 #include "lists.h"
 
 /**
- * print_listint - To print length of elements of the node list_t
+ * listint_len - To print length of elements of the node list_t
  * @h: all type of list_t to print
  * Return: number of elements
  */
-size_t print_listint(const listint_t *h)
+size_t listint_len(const listint_t *h)
 {
 	unsigned int number = 0;
 	const listint_t *searcher;
