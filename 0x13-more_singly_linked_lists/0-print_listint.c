@@ -10,6 +10,11 @@ size_t print_listint(const listint_t *h)
 	unsigned int number = 0;
 	const listint_t *searcher;
 
+	if (h == NULL)
+	{
+		return (0);
+	}
+
 	searcher = h;
 	while (searcher)
 	{
