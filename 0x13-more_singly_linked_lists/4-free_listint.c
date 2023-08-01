@@ -13,6 +13,6 @@ void free_listint(listint_t *head)
 	{
 		searcher = head->next;
 		free(head);
-		searcher = head;
+		head = searcher;
 	}
 }
