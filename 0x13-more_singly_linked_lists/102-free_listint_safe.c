@@ -7,34 +7,27 @@
  */
 size_t free_listint_safe(listint_t **h)
 {
-	listint_t *searcher;
-	size_t length = 0;
-	int i;
+	listint_t *start = *h;
+	listint_t *end;
+	unsigned int n = 0;
 
-	if (!h || !*h)
+	if (start == 0 || h == 0)
 	{
 		return (0);
 	}
 
-	while (*h)
+	start = *h;
+	while (start != 0)
 	{
-		i = *h - (*h)->next;
-		if (i > 0)
-		{
-			searcher = (*h)->next;
-			/*free(*h);*/
-			*h = searcher;
-			length++;
-		}
-		else
-		{
-			/*free(*h);*/
-			*h = NULL;
-			length++;
-			break;
-		}
-	}
-	*h = NULL;
+		end = start;
+		start = start->next;
+		n++;
 
-	return (length);
+		free(end);
+
+		if (end <= start)
+			break;
+	}
+	*h = 0;
+	return (n);
 }
