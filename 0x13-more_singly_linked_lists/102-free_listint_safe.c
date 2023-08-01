@@ -9,10 +9,12 @@ size_t free_listint_safe(listint_t **h)
 {
 	listint_t *searcher;
 	size_t length;
-	unsigned int i;
+	int i;
 
-	if (h == NULL || (*h)->next == NULL)
+	if (!h || !*h)
+	{
 		return (0);
+	}
 
 	while (*h)
 	{
