@@ -4,6 +4,7 @@
  * flip_bits - to flip the bits
  * @n: input number to be printed in bits
  * @m: current bit to flip
+ * Return: number of bits flip
  */
 unsigned int flip_bits(unsigned long int n, unsigned long int m)
 {
