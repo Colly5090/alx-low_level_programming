@@ -7,10 +7,8 @@
  */
 void print_binary(unsigned long int n)
 {
-	unsigned long int *current;
+	unsigned long int current = 1UL << (sizeof(unsigned long int) * 8 - 1);
 	int i = 1;
-
-	current = 1UL << (sizeof(unsigned long int) * 8 - 1);
 
 	while (current)
 	{
