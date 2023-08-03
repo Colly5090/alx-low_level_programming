@@ -1,32 +1,32 @@
 #include "main.h"
 
 /**
- * print_binary - to print in binary
+ * print_binary - To print binary
  * @n: number to be printed in binary
  * Return: nothing
  */
 void print_binary(unsigned long int n)
 {
-	unsigned long int value;
-	int x, counter = 0;
+	unsigned long int *current;
+	int i = 1;
 
-	for (x = 63; x >= 0; x--)
+	current = 1UL << (sizeof(unsigned long int) * 8 - 1);
+
+	while (current)
 	{
-		value = n >> x;
-
-		if (value & 1)
+		if (n & current)
 		{
+			i = 0;
 			_putchar('1');
-			counter++;
-		}
-		else if (counter)
+		} else if (!i)
 		{
 			_putchar('0');
 		}
-		if (!counter)
-		{
-			_putchar('0');
-		}
+		current >>= 1;
+	}
+
+	if (i)
+	{
+		_putchar('0');
 	}
 }
-
