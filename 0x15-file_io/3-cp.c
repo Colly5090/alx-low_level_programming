@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	buffer = createBuffer(argv[2]);
 	fromFile = open(argv[1], O_RDONLY);
 	readFile = read(fromFile, buffer, 1024);
-	toFile = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	toFile = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	do {
 		if (fromFile == -1 || readFile == -1)
 		{
