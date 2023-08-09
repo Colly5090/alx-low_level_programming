@@ -13,8 +13,8 @@ void is_data(unsigned char *e_ident);
 void is_version(unsigned char *e_ident);
 void is_osabi(unsigned char *e_ident);
 void is_abiversion(unsigned char *e_ident);
-void is_type(unsigned char *e_ident, unsigned int e_type);
-void is_entry(unsigned char *e_ident, unsigned int e_entry);
+void is_type(unsigned int e_type, unsigned char *e_ident);
+void is_entry(unsigned int e_type, unsigned char *e_ident);
 void fileClose(int fd);
 
 /**
