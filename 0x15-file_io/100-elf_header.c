@@ -1,10 +1,5 @@
 #include <elf.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "main.h"
 
 void is_elf(unsigned char *e_ident);
 void is_magic(unsigned char *e_ident);
@@ -14,7 +9,7 @@ void is_version(unsigned char *e_ident);
 void is_osabi(unsigned char *e_ident);
 void is_abiversion(unsigned char *e_ident);
 void is_type(unsigned int e_type, unsigned char *e_ident);
-void is_entry(unsigned int e_type, unsigned char *e_ident);
+void is_entry(unsigned long int e_entry, unsigned char *e_ident);
 void fileClose(int fd);
 
 /**
@@ -27,7 +22,7 @@ void is_elf(unsigned char *e_ident)
 	if (e_ident[0] != 0x7f || e_ident[1] != 'E' ||
 			e_ident[2] != 'L' || e_ident[3] != 'F')
 	{
-		dprintf(STDERR_FILENO, "ERROR: Enter correct elf file\n");
+		dprintf(STDERR_FILENO, "Error: Wrong elf file type\n");
 		exit(98);
 	}
 }
@@ -41,7 +36,7 @@ void is_magic(unsigned char *e_ident)
 {
 	int i;
 
-	printf("ELF header:\n Magic ");
+	printf(" Magic:  ");
 
 	for (i = 0; i < EI_NIDENT; i++)
 	{
@@ -65,11 +60,11 @@ void is_magic(unsigned char *e_ident)
  */
 void is_class(unsigned char *e_ident)
 {
-	printf(" Class: ");
+	printf(" Class:				");
 
 	if (e_ident[EI_CLASS] == ELFCLASSNONE)
 	{
-		printf("invald\n");
+		printf("none\n");
 	}
 	else if (e_ident[EI_CLASS] == ELFCLASS32)
 	{
@@ -92,7 +87,7 @@ void is_class(unsigned char *e_ident)
  */
 void is_data(unsigned char *e_ident)
 {
-	printf(" Data: ");
+	printf(" Data:				");
 
 	if (e_ident[EI_DATA] == ELFDATANONE)
 	{
@@ -100,15 +95,15 @@ void is_data(unsigned char *e_ident)
 	}
 	else if (e_ident[EI_DATA] == ELFDATA2LSB)
 	{
-		printf("Two's complement, little-endian\n");
+		printf("2's complement, little endian\n");
 	}
 	else if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
-		printf("Two's complement, big-endian\n");
+		printf("2's complement, big endian\n");
 	}
 	else
 	{
-		printf("<unknown: %x>\n", e_ident[EI_DATA]);
+		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
 	}
 }
 
@@ -119,11 +114,12 @@ void is_data(unsigned char *e_ident)
  */
 void is_version(unsigned char *e_ident)
 {
-	printf(" Version: %d", e_ident[EI_VERSION]);
+	printf(" Version:				%d",
+			e_ident[EI_VERSION]);
 
 	if (e_ident[EI_VERSION] == EV_CURRENT)
 	{
-		printf("(current)\n");
+		printf(" (current)\n");
 	}
 	else
 	{
@@ -138,7 +134,7 @@ void is_version(unsigned char *e_ident)
  */
 void is_osabi(unsigned char *e_ident)
 {
-	printf(" OS/ABI: ");
+	printf(" OS/ABI:				");
 
 	switch (e_ident[EI_OSABI])
 	{
@@ -167,13 +163,13 @@ void is_osabi(unsigned char *e_ident)
 		printf("UNIX - TRU64\n");
 		break;
 	case ELFOSABI_ARM:
-		printf("UNIX - ARM\n");
+		printf("ARM\n");
 		break;
 	case ELFOSABI_STANDALONE:
-		printf("UNIX - Stand-alone");
+		printf("Standalone App\n");
 		break;
 	default:
-		printf("< unkown: %x>\n", e_ident[EI_OSABI]);
+		printf("<unkown: %x>\n", e_ident[EI_OSABI]);
 	}
 }
 
@@ -184,7 +180,8 @@ void is_osabi(unsigned char *e_ident)
  */
 void is_abiversion(unsigned char *e_ident)
 {
-	printf(" ABI Version: %d\n", e_ident[EI_ABIVERSION]);
+	printf(" ABI Version:				%d\n",
+			e_ident[EI_ABIVERSION]);
 }
 
 /**
@@ -197,9 +194,9 @@ void is_type(unsigned int e_type, unsigned char *e_ident)
 {
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
-		e_type = e_type >> 8;
+		e_type >>= 8;
 	}
-	printf(" Type: ");
+	printf(" Type:				");
 
 	if (e_type == ET_NONE)
 	{
@@ -207,23 +204,23 @@ void is_type(unsigned int e_type, unsigned char *e_ident)
 	}
 	else if (e_type == ET_REL)
 	{
-		printf("REL (A relocatable file)\n");
+		printf("REL (Relocatable file)\n");
 	}
 	else if (e_type == ET_EXEC)
 	{
-		printf("EXEC (An executable file)\n");
+		printf("EXEC (Executable file)\n");
 	}
 	else if (e_type == ET_DYN)
 	{
-		printf("DYN (A shared object)\n");
+		printf("DYN (Shared object file)\n");
 	}
 	else if (e_type == ET_CORE)
 	{
-		printf("CORE (A core file)\n");
+		printf("CORE (Core file)\n");
 	}
 	else
 	{
-		printf("< unkown: %x>\n", e_type);
+		printf("<unkown: %x>\n", e_type);
 	}
 }
 
@@ -233,9 +230,9 @@ void is_type(unsigned int e_type, unsigned char *e_ident)
  * @e_entry: entry of elf file
  * Return: nothing
  */
-void is_entry(unsigned int e_entry, unsigned char *e_ident)
+void is_entry(unsigned long int e_entry, unsigned char *e_ident)
 {
-	printf(" Entry point address: ");
+	printf(" Entry point address:				");
 
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
@@ -244,11 +241,11 @@ void is_entry(unsigned int e_entry, unsigned char *e_ident)
 	}
 	if (e_ident[EI_CLASS] == ELFCLASS32)
 	{
-		printf("0x%x\n", (unsigned int)e_entry);
+		printf("%#x\n", (unsigned int)e_entry);
 	}
 	else
 	{
-		printf("0x%x\n", e_entry);
+		printf("%#lx\n", e_entry);
 	}
 }
 
@@ -261,7 +258,7 @@ void fileClose(int fd)
 {
 	if (close(fd) == -1)
 	{
-		dprintf(STDERR_FILENO, "ERROR: Elf file can't close %d\n", fd);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
 		exit(98);
 	}
 }
@@ -275,43 +272,43 @@ void fileClose(int fd)
 int main(int __attribute__((__unused__)) argc, char *argv[])
 {
 	int openFile, readFile;
-	Elf64_Ehdr *buffer;
+	Elf64_Ehdr *header;
 
 	openFile = open(argv[1], O_RDONLY);
 	if (openFile == -1)
 	{
-		dprintf(STDERR_FILENO, "ERROR: file can't be read %s\n", argv[1]);
+		dprintf(STDERR_FILENO, "Error: Can't read file %s\n", argv[1]);
 		exit(98);
 	}
 
-	buffer = malloc(sizeof(Elf64_Ehdr));
-	if (buffer == NULL)
+	header = malloc(sizeof(Elf64_Ehdr));
+	if (header == NULL)
 	{
 		fileClose(openFile);
-		dprintf(STDERR_FILENO, "ERROR: file can't be read %s\n", argv[1]);
+		dprintf(STDERR_FILENO, "Error: Can't read file %s\n", argv[1]);
 		exit(98);
 	}
 
-	readFile = read(openFile, buffer, sizeof(Elf64_Ehdr));
+	readFile = read(openFile, header, sizeof(Elf64_Ehdr));
 	if (readFile == -1)
 	{
-		free(buffer);
+		free(header);
 		fileClose(openFile);
-		dprintf(STDERR_FILENO, "ERROR: `%s`: No file\n", argv[1]);
+		dprintf(STDERR_FILENO, "Error: `%s`: No Such file\n", argv[1]);
 		exit(98);
 	}
-
-	is_elf(buffer->e_ident);
+	is_elf(header->e_ident);
 	printf("ELF Header:\n");
-	is_magic(buffer->e_ident);
-	is_class(buffer->e_ident);
-	is_data(buffer->e_ident);
-	is_version(buffer->e_ident);
-	is_osabi(buffer->e_ident);
-	is_type(buffer->e_entry, buffer->e_ident);
-	is_entry(buffer->e_entry, buffer->e_ident);
+	is_magic(header->e_ident);
+	is_class(header->e_ident);
+	is_data(header->e_ident);
+	is_version(header->e_ident);
+	is_osabi(header->e_ident);
+	is_abiversion(header->e_ident);
+	is_type(header->e_type, header->e_ident);
+	is_entry(header->e_entry, header->e_ident);
 
-	free(buffer);
+	free(header);
 	fileClose(openFile);
 	return (0);
 }
