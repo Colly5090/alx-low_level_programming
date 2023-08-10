@@ -11,8 +11,8 @@ void is_magic(unsigned char *e_ident);
 void is_class(unsigned char *e_ident);
 void is_data(unsigned char *e_ident);
 void is_version(unsigned char *e_ident);
-void is_osabi(unsigned char *e_ident);
 void is_abiversion(unsigned char *e_ident);
+void is_osabi(unsigned char *e_ident);
 void is_type(unsigned int e_type, unsigned char *e_ident);
 void is_entry(unsigned long int e_entry, unsigned char *e_ident);
 void fileClose(int fd);
@@ -24,8 +24,8 @@ void fileClose(int fd);
  */
 void is_elf(unsigned char *e_ident)
 {
-	if (e_ident[0] != 0x7f || e_ident[1] != 'E' ||
-			e_ident[2] != 'L' || e_ident[3] != 'F')
+	if (e_ident[0] != 0x7f && e_ident[1] != 'E' &&
+			e_ident[2] != 'L' && e_ident[3] != 'F')
 	{
 		dprintf(STDERR_FILENO, "Error: Wrong elf file type\n");
 		exit(98);
@@ -67,20 +67,18 @@ void is_class(unsigned char *e_ident)
 {
 	printf(" Class:				");
 
-	if (e_ident[EI_CLASS] == ELFCLASSNONE)
+	switch (e_ident[EI_CLASS])
 	{
+	case ELFCLASSNONE:
 		printf("none\n");
-	}
-	else if (e_ident[EI_CLASS] == ELFCLASS32)
-	{
+		break;
+	case ELFCLASS32:
 		printf("ELF32\n");
-	}
-	else if (e_ident[EI_CLASS] == ELFCLASS64)
-	{
+		break;
+	case ELFCLASS64:
 		printf("ELF64\n");
-	}
-	else
-	{
+		break;
+	default:
 		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
 	}
 }
@@ -94,20 +92,18 @@ void is_data(unsigned char *e_ident)
 {
 	printf(" Data:				");
 
-	if (e_ident[EI_DATA] == ELFDATANONE)
+	switch(e_ident[EI_DATA])
 	{
+	case ELFDATANONE:
 		printf("none\n");
-	}
-	else if (e_ident[EI_DATA] == ELFDATA2LSB)
-	{
+		break;
+	case ELFDATA2LSB:
 		printf("2's complement, little endian\n");
-	}
-	else if (e_ident[EI_DATA] == ELFDATA2MSB)
-	{
+		break;
+	case ELFDATA2MSB:
 		printf("2's complement, big endian\n");
-	}
-	else
-	{
+		break;
+	default:
 		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
 	}
 }
