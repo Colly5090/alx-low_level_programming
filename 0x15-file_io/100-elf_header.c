@@ -92,7 +92,7 @@ void is_data(unsigned char *e_ident)
 {
 	printf(" Data:				");
 
-	switch(e_ident[EI_DATA])
+	switch (e_ident[EI_DATA])
 	{
 	case ELFDATANONE:
 		printf("none\n");
@@ -118,13 +118,14 @@ void is_version(unsigned char *e_ident)
 	printf(" Version:				%d",
 			e_ident[EI_VERSION]);
 
-	if (e_ident[EI_VERSION] == EV_CURRENT)
+	switch (e_ident[EI_VERSION])
 	{
+	case EV_CURRENT:
 		printf(" (current)\n");
-	}
-	else
-	{
+		break;
+	default:
 		printf("\n");
+		break;
 	}
 }
 
@@ -194,33 +195,28 @@ void is_abiversion(unsigned char *e_ident)
 void is_type(unsigned int e_type, unsigned char *e_ident)
 {
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
-	{
 		e_type >>= 8;
-	}
+
 	printf(" Type:				");
 
-	if (e_type == ET_NONE)
+	switch (e_type)
 	{
+	case ET_NONE:
 		printf("NONE (none)\n");
-	}
-	else if (e_type == ET_REL)
-	{
+		break;
+	case ET_REL:
 		printf("REL (Relocatable file)\n");
-	}
-	else if (e_type == ET_EXEC)
-	{
+		break;
+	case ET_EXEC:
 		printf("EXEC (Executable file)\n");
-	}
-	else if (e_type == ET_DYN)
-	{
+		break;
+	case ET_DYN:
 		printf("DYN (Shared object file)\n");
-	}
-	else if (e_type == ET_CORE)
-	{
+		break;
+	case ET_CORE:
 		printf("CORE (Core file)\n");
-	}
-	else
-	{
+		break;
+	default:
 		printf("<unkown: %x>\n", e_type);
 	}
 }
