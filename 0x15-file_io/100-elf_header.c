@@ -1,5 +1,10 @@
 #include <elf.h>
-#include "main.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void is_elf(unsigned char *e_ident);
 void is_magic(unsigned char *e_ident);
