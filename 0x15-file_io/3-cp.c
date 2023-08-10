@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 			free(buffer);
 			exit(99);
 		}
-		readFile = read(toFile, buffer, 1024);
+		readFile = read(fromFile, buffer, 1024);
 		toFile = open(argv[2], O_WRONLY | O_APPEND);
 	} while (readFile > 0);
 	free(buffer);
