@@ -15,7 +15,7 @@ void is_abiversion(unsigned char *e_ident);
 void is_osabi(unsigned char *e_ident);
 void is_type(unsigned int e_type, unsigned char *e_ident);
 void is_entry(unsigned long int e_entry, unsigned char *e_ident);
-void fileClose(int fd);
+void fileClose(int elf);
 
 /**
  * is_elf - to check if a file is an elf type
@@ -30,7 +30,7 @@ void is_elf(unsigned char *e_ident)
 	{
 		if (e_ident[i] != 127 &&
 		    e_ident[i] != 'E' &&
-		    e_ident[i] != 'L' && 
+		    e_ident[i] != 'L' &&
 		    e_ident[i] != 'F')
 	{
 		dprintf(STDERR_FILENO, "Error: Not an Elf file\n");
@@ -255,7 +255,7 @@ void is_entry(unsigned long int e_entry, unsigned char *e_ident)
 
 /**
  * fileClose - to close all open files
- * @fd: file to close
+ * @elf: file to close
  * Return: nothing
  */
 void fileClose(int elf)
@@ -301,7 +301,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 		dprintf(STDERR_FILENO, "Error: `%s`: No Such file\n", argv[1]);
 		exit(98);
 	}
-	
+
 	is_elf(header->e_ident);
 	printf("ELF Header:\n");
 	is_magic(header->e_ident);
