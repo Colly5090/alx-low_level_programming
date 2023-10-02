@@ -24,10 +24,16 @@ void fileClose(int fd);
  */
 void is_elf(unsigned char *e_ident)
 {
-	if (e_ident[0] != 0x7f && e_ident[1] != 'E' &&
-			e_ident[2] != 'L' && e_ident[3] != 'F')
+	int i;
+
+	for (i = 0; i < 4; i++)
 	{
-		dprintf(STDERR_FILENO, "Error: Wrong elf file type\n");
+		if (e_ident[i] != 127 &&
+		    e_ident[i] != 'E' &&
+		    e_ident[i] != 'L' && 
+		    e_ident[i] != 'F')
+	{
+		dprintf(STDERR_FILENO, "Error: Not an Elf file\n");
 		exit(98);
 	}
 }
@@ -41,7 +47,7 @@ void is_magic(unsigned char *e_ident)
 {
 	int i;
 
-	printf(" Magic:  ");
+	printf("  Magic:   ");
 
 	for (i = 0; i < EI_NIDENT; i++)
 	{
