@@ -71,7 +71,7 @@ void is_magic(unsigned char *e_ident)
  */
 void is_class(unsigned char *e_ident)
 {
-	printf(" Class:				");
+	printf("  Class:                             ");
 
 	switch (e_ident[EI_CLASS])
 	{
@@ -96,7 +96,7 @@ void is_class(unsigned char *e_ident)
  */
 void is_data(unsigned char *e_ident)
 {
-	printf(" Data:				");
+	printf("  Data:                              ");
 
 	switch (e_ident[EI_DATA])
 	{
@@ -121,7 +121,7 @@ void is_data(unsigned char *e_ident)
  */
 void is_version(unsigned char *e_ident)
 {
-	printf(" Version:				%d",
+	printf("  Version:                           %d",
 			e_ident[EI_VERSION]);
 
 	switch (e_ident[EI_VERSION])
@@ -142,7 +142,7 @@ void is_version(unsigned char *e_ident)
  */
 void is_osabi(unsigned char *e_ident)
 {
-	printf(" OS/ABI:				");
+	printf("  OS/ABI:                            ");
 
 	switch (e_ident[EI_OSABI])
 	{
@@ -188,7 +188,7 @@ void is_osabi(unsigned char *e_ident)
  */
 void is_abiversion(unsigned char *e_ident)
 {
-	printf(" ABI Version:				%d\n",
+	printf(("  ABI Version:                       %d\n",
 			e_ident[EI_ABIVERSION]);
 }
 
@@ -203,12 +203,12 @@ void is_type(unsigned int e_type, unsigned char *e_ident)
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 		e_type >>= 8;
 
-	printf(" Type:				");
+	printf("  Type:                              ");
 
 	switch (e_type)
 	{
 	case ET_NONE:
-		printf("NONE (none)\n");
+		printf("NONE (None)\n");
 		break;
 	case ET_REL:
 		printf("REL (Relocatable file)\n");
@@ -235,11 +235,12 @@ void is_type(unsigned int e_type, unsigned char *e_ident)
  */
 void is_entry(unsigned long int e_entry, unsigned char *e_ident)
 {
-	printf(" Entry point address:				");
+	printf("  Entry point address:               ");
 
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
-		e_entry = ((e_entry << 8) & 0xFF00FF00) | ((e_entry >> 8) & 0xFF00FF);
+		e_entry = ((e_entry << 8) & 0xFF00FF00) |
+				  ((e_entry >> 8) & 0xFF00FF);
 		e_entry = (e_entry << 16) | (e_entry >> 16);
 	}
 	if (e_ident[EI_CLASS] == ELFCLASS32)
@@ -257,11 +258,11 @@ void is_entry(unsigned long int e_entry, unsigned char *e_ident)
  * @fd: file to close
  * Return: nothing
  */
-void fileClose(int fd)
+void fileClose(int elf)
 {
-	if (close(fd) == -1)
+	if (close(elf) == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", elf);
 		exit(98);
 	}
 }
@@ -300,6 +301,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 		dprintf(STDERR_FILENO, "Error: `%s`: No Such file\n", argv[1]);
 		exit(98);
 	}
+	
 	is_elf(header->e_ident);
 	printf("ELF Header:\n");
 	is_magic(header->e_ident);
