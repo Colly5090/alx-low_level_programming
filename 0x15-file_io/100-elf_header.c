@@ -15,7 +15,7 @@ void is_abiversion(unsigned char *e_ident);
 void is_osabi(unsigned char *e_ident);
 void is_type(unsigned int e_type, unsigned char *e_ident);
 void is_entry(unsigned long int e_entry, unsigned char *e_ident);
-void fileClose(int elf);
+void fileClose(int fd);
 
 /**
  * is_elf - to check if a file is an elf type
@@ -24,16 +24,10 @@ void fileClose(int elf);
  */
 void is_elf(unsigned char *e_ident)
 {
-	int i;
-
-	for (i = 0; i < 4; i++)
+	if (e_ident[0] != 127 && e_ident[1] != 'E' &&
+			e_ident[2] != 'L' && e_ident[3] != 'F')
 	{
-		if (e_ident[i] != 127 &&
-		    e_ident[i] != 'E' &&
-		    e_ident[i] != 'L' &&
-		    e_ident[i] != 'F')
-	{
-		dprintf(STDERR_FILENO, "Error: Not an Elf file\n");
+		dprintf(STDERR_FILENO, "Error: Wrong elf file type\n");
 		exit(98);
 	}
 }
@@ -122,7 +116,7 @@ void is_data(unsigned char *e_ident)
 void is_version(unsigned char *e_ident)
 {
 	printf("  Version:                           %d",
-			e_ident[EI_VERSION]);
+	       e_ident[EI_VERSION]);
 
 	switch (e_ident[EI_VERSION])
 	{
@@ -188,8 +182,8 @@ void is_osabi(unsigned char *e_ident)
  */
 void is_abiversion(unsigned char *e_ident)
 {
-	printf(("  ABI Version:                       %d\n",
-			e_ident[EI_ABIVERSION]);
+	printf("  ABI Version:                       %d\n",
+		e_ident[EI_ABIVERSION]);
 }
 
 /**
@@ -239,8 +233,7 @@ void is_entry(unsigned long int e_entry, unsigned char *e_ident)
 
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
-		e_entry = ((e_entry << 8) & 0xFF00FF00) |
-				  ((e_entry >> 8) & 0xFF00FF);
+		e_entry = ((e_entry << 8) & 0xFF00FF00) | ((e_entry >> 8) & 0xFF00FF);
 		e_entry = (e_entry << 16) | (e_entry >> 16);
 	}
 	if (e_ident[EI_CLASS] == ELFCLASS32)
@@ -255,14 +248,14 @@ void is_entry(unsigned long int e_entry, unsigned char *e_ident)
 
 /**
  * fileClose - to close all open files
- * @elf: file to close
+ * @fd: file to close
  * Return: nothing
  */
-void fileClose(int elf)
+void fileClose(int fd)
 {
-	if (close(elf) == -1)
+	if (close(fd) == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", elf);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
 		exit(98);
 	}
 }
@@ -301,7 +294,6 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 		dprintf(STDERR_FILENO, "Error: `%s`: No Such file\n", argv[1]);
 		exit(98);
 	}
-
 	is_elf(header->e_ident);
 	printf("ELF Header:\n");
 	is_magic(header->e_ident);
