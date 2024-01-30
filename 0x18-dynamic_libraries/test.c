@@ -1,10 +1,9 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 
-int intercept(const char *format, ...)
+void __attribute__((constructor)) intercept(void)
 {
-	write(1, "9 8 10 24 75 +9\n", 17);
-	write(1, "Congratulations, you win the Jackpot!\n", 38);
+	printf("9 8 10 24 75 - 9\n");
+	printf("Congratulations, you win the Jackpot!\n");
 	exit(EXIT_SUCCESS);
 }
